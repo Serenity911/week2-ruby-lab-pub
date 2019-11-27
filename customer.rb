@@ -7,23 +7,44 @@ attr_reader :name, :wallet, :age, :drunkenness
     @wallet = wallet
     @age = age
     @drinks = []
-    @drunkenness = 0 
+    @drunkenness = 0
+    @foods = []
   end
 
   def check_money_for_drink(drink)
     return @wallet >= drink.price
   end
 
+  #TODO RUN THE TESTS
+  def check_money_for_food(food)
+    return @wallet >= food.price
+  end
+
   def drink_counter()
     return @drinks.length
+  end
+
+#TODO RUN THE TESTS
+  def food_counter()
+    return @foods.length
   end
 
   def increase_drink(drink)
     return @drinks.push(drink)
   end
 
+  #TODO RUN THE TESTS
+  def increase_food(food)
+    return @foods.push(food)
+  end
+
   def decrease_wallet(drink)
     return @wallet -= drink.price
+  end
+
+  #TODO RUN THE TESTS
+  def decrease_wallet(food)
+    return @wallet -= food.price
   end
 
   def increase_drunkenness(drink)

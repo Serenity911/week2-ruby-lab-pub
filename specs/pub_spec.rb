@@ -14,7 +14,8 @@ class TestPub < Minitest::Test
     @drink2 = Drink.new("Tennants", 6, 10)
     @drink4 = Drink.new("The Satan Circus", 10, 90)
     @food1 = Food.new("pizza", 5, 20)
-    @pub = Pub.new("CodePub", 0, {@food1 => 10}, {@drink1 => 3, @drink2 => 0, @drink4 => 1})
+    @food2 = Food.new("chips", 3, 5)
+    @pub = Pub.new("CodePub", 0, {@food1 => 10, @food2 => 0}, {@drink1 => 3, @drink2 => 0, @drink4 => 1})
     @customer1 = Customer.new("SiggyDaMan", 100, 100)
     @customer2 = Customer.new("Silvia", 1, 18)
     @customer3 = Customer.new("LittleJimmy", 50, 10)
@@ -41,14 +42,29 @@ class TestPub < Minitest::Test
     assert_equal(true, check_has_drink)
   end
 
+  def test_check_pub_has_specific_food
+    check_has_food= @pub.has_food(@food1)
+    assert_equal(true, check_has_food)
+  end
+
   def test_check_pub_does_not_have_a_drink
     check_has_drink = @pub.has_drink(@drink3)
     assert_equal(false, check_has_drink)
   end
 
+  def test_check_pub_does_not_have_specific_food
+    check_has_food= @pub.has_food(@food3)
+    assert_equal(false, check_has_food)
+  end
+
   def test_ask_customer_to_check_if_they_have_enough_money_for_a_drink
-    assert_equal(true, @pub.ask_customer_to_check_money(@customer1, @drink1))
-    assert_equal(false, @pub.ask_customer_to_check_money(@customer2, @drink1))
+    assert_equal(true, @pub.ask_customer_to_check_money_for_drink(@customer1, @drink1))
+    assert_equal(false, @pub.ask_customer_to_check_money_for_drink(@customer2, @drink1))
+  end
+
+  def test_ask_customer_to_check_if_they_have_enough_money_for_food
+    assert_equal(true, @pub.ask_customer_to_check_money_for_food(@customer1, @food1))
+    assert_equal(false, @pub.ask_customer_to_check_money_for_food(@customer2, @food1))
   end
 
   def test_drink_stock_reduces_by_one
@@ -56,9 +72,19 @@ class TestPub < Minitest::Test
     assert_equal(2, @pub.drink_stock(@drink1))
   end
 
+  def test_food_stock_reduces_by_one
+    @pub.reduce_food_stock(@food1)
+    assert_equal(9, @pub.food_stock(@food1))
+  end
+
   def test_drink_stock_do_not_reduce_if_drink_not_found
     @pub.reduce_drink_stock(@drink3)
     assert_nil(@pub.drink_stock(@drink3))
+  end
+
+  def test_food_stock_do_not_reduce_if_food_not_found
+    @pub.reduce_food_stock(@food3)
+    assert_nil(@pub.food_stock(@food3))
   end
 
   def test_drink_stock_do_not_reduce_if_drink_stock_zero
@@ -66,11 +92,22 @@ class TestPub < Minitest::Test
     assert_equal(0, @pub.drink_stock(@drink2))
   end
 
+  def test_food_stock_do_not_reduce_if_food_stock_zero
+    @pub.reduce_food_stock(@food2)
+    assert_equal(0, @pub.food_stock(@food2))
+  end
+
   def test_till_increases_by_price_of_drink
     @pub.increase_till_by_price_of_drink(@drink1)
     assert_equal(10, @pub.till)
   end
 
+  def test_till_increases_by_price_of_food
+    @pub.increase_till_by_price_of_food(@food1)
+    assert_equal(5, @pub.till)
+  end
+
+#tests for selling a drink
   def test_sell_a_drink
     @pub.sell_a_drink(@customer1, @drink1)
     assert_equal(2, @pub.drink_stock(@drink1))
@@ -142,9 +179,14 @@ class TestPub < Minitest::Test
     assert_equal(90, @pub.check_customer_drunkennes(@customer1))
   end
 
-  # def test_pub_sell_food
-  #   @pub.sell_food(@customer1, @food)
-  # end
+# test for selling food
+    def test_sell_food
+      @pub.sell_food(@customer1, @food1)
+      assert_equal(9, @pub.food_stock(@food1))
+      assert_equal(5, @pub.till)
+      assert_equal(1, @customer1.food_counter)
+      assert_equal(95, @customer1.wallet)
+    end
 
 
 end
