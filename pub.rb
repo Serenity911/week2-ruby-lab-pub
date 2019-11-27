@@ -22,5 +22,25 @@ attr_reader :name, :till
     return customer.check_money_for_drink(drink)
   end
 
+  def reduce_drink_stock(drink)
+    if @drinks.include?(drink)
+      @drinks.delete(drink)
+    end
+  end
+
+  def increase_till_by_price_of_drink(drink)
+    @till += drink.price
+  end
+
+  def sell_a_drink(customer, drink)
+    if @drinks.include?(drink)
+      if ask_customer_to_check_money(customer, drink)
+        reduce_drink_stock(drink)
+        increase_till_by_price_of_drink(drink)
+        customer.increase_drink(drink)
+        customer.decrease_wallet(drink)
+      end
+    end
+  end
 
 end

@@ -38,5 +38,44 @@ class TestPub < Minitest::Test
     assert_equal(false, @pub.ask_customer_to_check_money(@customer2, @drink1))
   end
 
+  def test_drink_stock_reduces_by_one
+    @pub.reduce_drink_stock(@drink1)
+    assert_equal(1, @pub.drink_stock)
+  end
+
+  def test_drink_stock_do_not_reduce_if_drink_not_found
+    @pub.reduce_drink_stock(@drink3)
+    assert_equal(2, @pub.drink_stock)
+  end
+
+  def test_till_increases_by_price_of_drink
+    @pub.increase_till_by_price_of_drink(@drink1)
+    assert_equal(10, @pub.till)
+  end
+
+  def test_sell_a_drink
+    @pub.sell_a_drink(@customer1, @drink1)
+    assert_equal(1, @pub.drink_stock)
+    assert_equal(10, @pub.till)
+    assert_equal(1, @customer1.drink_counter)
+    assert_equal(90, @customer1.wallet)
+  end
+
+  def test_do_not_sell_drink_if_not_in_stock
+    @pub.sell_a_drink(@customer1, @drink3)
+    assert_equal(2, @pub.drink_stock)
+    assert_equal(0, @pub.till)
+    assert_equal(0, @customer1.drink_counter)
+    assert_equal(100, @customer1.wallet)
+  end
+
+  def test_do_not_sell_drink_if_customer_has_not_enough_money
+    @pub.sell_a_drink(@customer2, @drink1)
+    assert_equal(2, @pub.drink_stock)
+    assert_equal(0, @pub.till)
+    assert_equal(0, @customer2.drink_counter)
+    assert_equal(1, @customer2.wallet)
+  end
+
 
 end
