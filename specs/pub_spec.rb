@@ -107,7 +107,7 @@ class TestPub < Minitest::Test
     assert_equal(5, @pub.till)
   end
 
-#tests for selling a drink
+  #tests for selling a drink
   def test_sell_a_drink
     @pub.sell_a_drink(@customer1, @drink1)
     assert_equal(2, @pub.drink_stock(@drink1))
@@ -179,14 +179,14 @@ class TestPub < Minitest::Test
     assert_equal(90, @pub.check_customer_drunkennes(@customer1))
   end
 
-# test for selling food
-    def test_sell_food
-      @pub.sell_food(@customer1, @food1)
-      assert_equal(9, @pub.food_stock(@food1))
-      assert_equal(5, @pub.till)
-      assert_equal(1, @customer1.food_counter)
-      assert_equal(95, @customer1.wallet)
-    end
+  # test for selling food
+  def test_sell_food
+    @pub.sell_food(@customer1, @food1)
+    assert_equal(9, @pub.food_stock(@food1))
+    assert_equal(5, @pub.till)
+    assert_equal(1, @customer1.food_counter)
+    assert_equal(95, @customer1.wallet)
+  end
 
 
 end

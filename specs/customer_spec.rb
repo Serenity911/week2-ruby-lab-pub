@@ -27,8 +27,17 @@ class TestCustomer < Minitest::Test
     assert_equal(true, @customer.check_money_for_drink(@drink))
   end
 
+  def test_customer_has_money_for_food
+    assert_equal(true, @customer.check_money_for_food(@food))
+  end
+
+
   def test_drink_counter_start_at_zero
     assert_equal(0, @customer.drink_counter)
+  end
+
+  def test_food_counter_start_at_zero
+    assert_equal(0, @customer.food_counter)
   end
 
   def test_drink_array_has_increase_by_one_drink
@@ -36,9 +45,19 @@ class TestCustomer < Minitest::Test
     assert_equal(1, @customer.drink_counter)
   end
 
+  def test_food_array_has_increase_by_food
+    @customer.increase_food(@food)
+    assert_equal(1, @customer.food_counter)
+  end
+
   def test_customer_wallet_decreases_by_price_of_drink
-    @customer.decrease_wallet(@drink)
+    @customer.decrease_wallet_after_buying_drink(@drink)
     assert_equal(980, @customer.wallet)
+  end
+
+  def test_customer_wallet_decreases_by_price_of_food
+    @customer.decrease_wallet_after_buying_food(@food)
+    assert_equal(995, @customer.wallet)
   end
 
   def test_customer_age

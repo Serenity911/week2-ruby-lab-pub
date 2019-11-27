@@ -1,6 +1,6 @@
 class Drink
 
-attr_reader :name, :price, :alcohol_level
+  attr_reader :name, :price, :alcohol_level
 
   def initialize(name, price, alcohol_level)
     @name = name

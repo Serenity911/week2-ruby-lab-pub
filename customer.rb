@@ -1,6 +1,6 @@
 class Customer
 
-attr_reader :name, :wallet, :age, :drunkenness
+  attr_reader :name, :wallet, :age, :drunkenness
 
   def initialize(name, wallet, age)
     @name = name
@@ -15,7 +15,6 @@ attr_reader :name, :wallet, :age, :drunkenness
     return @wallet >= drink.price
   end
 
-  #TODO RUN THE TESTS
   def check_money_for_food(food)
     return @wallet >= food.price
   end
@@ -24,7 +23,6 @@ attr_reader :name, :wallet, :age, :drunkenness
     return @drinks.length
   end
 
-#TODO RUN THE TESTS
   def food_counter()
     return @foods.length
   end
@@ -33,17 +31,16 @@ attr_reader :name, :wallet, :age, :drunkenness
     return @drinks.push(drink)
   end
 
-  #TODO RUN THE TESTS
   def increase_food(food)
     return @foods.push(food)
   end
 
-  def decrease_wallet(drink)
+  def decrease_wallet_after_buying_drink(drink)
     return @wallet -= drink.price
   end
 
   #TODO RUN THE TESTS
-  def decrease_wallet(food)
+  def decrease_wallet_after_buying_food(food)
     return @wallet -= food.price
   end
 

@@ -35,9 +35,9 @@ class Pub
     return customer.check_money_for_drink(drink)
   end
 
-    def ask_customer_to_check_money_for_food(customer, food)
-      return customer.check_money_for_food(food)
-    end
+  def ask_customer_to_check_money_for_food(customer, food)
+    return customer.check_money_for_food(food)
+  end
 
   def has_drink(drink)
     if drink_stock(drink).nil?
@@ -81,7 +81,7 @@ class Pub
             reduce_drink_stock(drink)
             increase_till_by_price_of_drink(drink)
             customer.increase_drink(drink)
-            customer.decrease_wallet(drink)
+            customer.decrease_wallet_after_buying_drink(drink)
             customer.increase_drunkenness(drink)
           end
         end
@@ -103,7 +103,7 @@ class Pub
         reduce_food_stock(food)
         increase_till_by_price_of_food(food)
         customer.increase_food(food)
-        customer.decrease_wallet(food)
+        customer.decrease_wallet_after_buying_food(food)
         customer.decrease_drunkenness(food)
       end
     end
