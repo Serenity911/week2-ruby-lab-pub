@@ -1,32 +1,42 @@
+require_relative('drink')
+require_relative('food')
+
 class Pub
 
 attr_reader :name, :till
 
 
-  def initialize(name, till, drinks_array = [] )
+  def initialize(name, till, food, drinks_hash = {} )
     @name = name
     @till = till
-    @drinks = drinks_array
+    @drinks_stock = drinks_hash
     @minimum_age = 18
     @drunkeness_limit = 100
+    @food = food
   end
 
-  def drink_stock()
-    return @drinks.length
+  def total_drinks_stock()
+    return @drinks_stock.values.inject(0){|sum,x| sum + x}
+  end
+
+  def drink_stock(drink)
+    @drinks_stock[drink]
   end
 
   def ask_customer_to_check_money(customer, drink)
-    # if customer.check_money_for_drink(drink) == true
-    #   return true
-    # else
-    #   return false
-    # end
     return customer.check_money_for_drink(drink)
   end
 
+  def has_drink(drink)
+    if drink_stock(drink).nil?
+      return false
+    end
+    drink_stock(drink) > 0
+  end
+
   def reduce_drink_stock(drink)
-    if @drinks.include?(drink)
-      @drinks.delete(drink)
+    if !drink_stock(drink).nil? && drink_stock(drink) != 0
+    @drinks_stock[drink] -= 1
     end
   end
 
@@ -35,7 +45,7 @@ attr_reader :name, :till
   end
 
   def sell_a_drink(customer, drink)
-    if @drinks.include?(drink)
+    if has_drink(drink)
       if check_minimum_age(customer)
         if check_customer_drunkennes(customer) <= @drunkeness_limit
           if ask_customer_to_check_money(customer, drink)
@@ -57,5 +67,6 @@ attr_reader :name, :till
   def check_customer_drunkennes(customer)
     return customer.drunkenness
   end
+
 
 end

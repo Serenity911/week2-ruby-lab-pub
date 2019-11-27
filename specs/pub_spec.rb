@@ -5,6 +5,7 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 require_relative('../pub')
 require_relative('../drink')
 require_relative('../customer')
+require_relative('../food')
 
 class TestPub < Minitest::Test
 
@@ -12,7 +13,8 @@ class TestPub < Minitest::Test
     @drink1 = Drink.new("Cosmopolitan", 10, 16)
     @drink2 = Drink.new("Tennants", 6, 10)
     @drink4 = Drink.new("The Satan Circus", 10, 90)
-    @pub = Pub.new("CodePub", 0, [@drink1, @drink2, @drink4])
+    @food1 = Food.new("pizza", 5, 20)
+    @pub = Pub.new("CodePub", 0, @food1, {@drink1 => 3, @drink2 => 0, @drink4 => 1})
     @customer1 = Customer.new("SiggyDaMan", 100, 100)
     @customer2 = Customer.new("Silvia", 1, 18)
     @customer3 = Customer.new("LittleJimmy", 50, 10)
@@ -27,13 +29,18 @@ class TestPub < Minitest::Test
   end
 
   def test_pub_drink_counter_starts_with_three_drinks
-    assert_equal(3, @pub.drink_stock)
+    assert_equal(4, @pub.total_drinks_stock)
   end
 
-  # def test_check_pub_has_drinks
-  #   @pub.has_drinks
-  #   assert_equal(true, true)
-  # end
+  def test_check_pub_has_a_drink
+    check_has_drink = @pub.has_drink(@drink1)
+    assert_equal(true, check_has_drink)
+  end
+
+  def test_check_pub_does_not_have_a_drink
+    check_has_drink = @pub.has_drink(@drink3)
+    assert_equal(false, check_has_drink)
+  end
 
   def test_ask_customer_to_check_if_they_have_enough_money_for_a_drink
     assert_equal(true, @pub.ask_customer_to_check_money(@customer1, @drink1))
@@ -42,12 +49,17 @@ class TestPub < Minitest::Test
 
   def test_drink_stock_reduces_by_one
     @pub.reduce_drink_stock(@drink1)
-    assert_equal(2, @pub.drink_stock)
+    assert_equal(2, @pub.drink_stock(@drink1))
   end
 
   def test_drink_stock_do_not_reduce_if_drink_not_found
     @pub.reduce_drink_stock(@drink3)
-    assert_equal(3, @pub.drink_stock)
+    assert_nil(@pub.drink_stock(@drink3))
+  end
+
+  def test_drink_stock_do_not_reduce_if_drink_stock_zero
+    @pub.reduce_drink_stock(@drink2)
+    assert_equal(0, @pub.drink_stock(@drink2))
   end
 
   def test_till_increases_by_price_of_drink
@@ -57,7 +69,7 @@ class TestPub < Minitest::Test
 
   def test_sell_a_drink
     @pub.sell_a_drink(@customer1, @drink1)
-    assert_equal(2, @pub.drink_stock)
+    assert_equal(2, @pub.drink_stock(@drink1))
     assert_equal(10, @pub.till)
     assert_equal(1, @customer1.drink_counter)
     assert_equal(90, @customer1.wallet)
@@ -65,7 +77,7 @@ class TestPub < Minitest::Test
 
   def test_do_not_sell_drink_if_not_in_stock
     @pub.sell_a_drink(@customer1, @drink3)
-    assert_equal(3, @pub.drink_stock)
+    assert_equal(false, @pub.has_drink(@drink3))
     assert_equal(0, @pub.till)
     assert_equal(0, @customer1.drink_counter)
     assert_equal(100, @customer1.wallet)
@@ -73,7 +85,7 @@ class TestPub < Minitest::Test
 
   def test_do_not_sell_drink_if_customer_has_not_enough_money
     @pub.sell_a_drink(@customer2, @drink1)
-    assert_equal(3, @pub.drink_stock)
+    assert_equal(3, @pub.drink_stock(@drink1))
     assert_equal(0, @pub.till)
     assert_equal(0, @customer2.drink_counter)
     assert_equal(1, @customer2.wallet)
@@ -81,7 +93,7 @@ class TestPub < Minitest::Test
 
   def test_do_not_sell_drink_if_customer_is_not_old_enough
     @pub.sell_a_drink(@customer3, @drink1)
-    assert_equal(3, @pub.drink_stock)
+    assert_equal(3, @pub.drink_stock(@drink1))
     assert_equal(0, @pub.till)
     assert_equal(0, @customer3.drink_counter)
     assert_equal(50, @customer3.wallet)
@@ -89,7 +101,7 @@ class TestPub < Minitest::Test
 
   def test_sell_drink_if_customer_is_old_enough
     @pub.sell_a_drink(@customer1, @drink1)
-    assert_equal(2, @pub.drink_stock)
+    assert_equal(2, @pub.drink_stock(@drink1))
     assert_equal(10, @pub.till)
     assert_equal(1, @customer1.drink_counter)
     assert_equal(90, @customer1.wallet)
@@ -99,7 +111,7 @@ class TestPub < Minitest::Test
     customer_old_enough = @pub.check_minimum_age(@customer1)
     assert_equal(true, customer_old_enough)
   end
-
+  #
   def test_customer_is_old_enough_to_drink
     customer_not_old_enough = @pub.check_minimum_age(@customer3)
     assert_equal(false, customer_not_old_enough)
@@ -114,7 +126,8 @@ class TestPub < Minitest::Test
     @pub.sell_a_drink(@customer1, @drink4)
     @pub.sell_a_drink(@customer1, @drink1)
     @pub.sell_a_drink(@customer1, @drink2)
-    assert_equal(1, @pub.drink_stock)
+    assert_equal(2, @pub.drink_stock(@drink1))
+    assert_equal(0, @pub.drink_stock(@drink4))
     assert_equal(20, @pub.till)
     assert_equal(2, @customer1.drink_counter)
     assert_equal(80, @customer1.wallet)
@@ -124,4 +137,10 @@ class TestPub < Minitest::Test
     @pub.sell_a_drink(@customer1, @drink4)
     assert_equal(90, @pub.check_customer_drunkennes(@customer1))
   end
+
+  # def test_pub_sell_food
+  #   @pub.sell_food(@customer1, @food)
+  # end
+
+
 end

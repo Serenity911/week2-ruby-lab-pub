@@ -7,10 +7,7 @@ attr_reader :name, :wallet, :age, :drunkenness
     @wallet = wallet
     @age = age
     @drinks = []
-    @drunkenness = 0
-    # TODO: USE DRUNK TRUE OR FALSE
-    # @alcohol_consumed = 0
-    # @drunk = false
+    @drunkenness = 0 
   end
 
   def check_money_for_drink(drink)
