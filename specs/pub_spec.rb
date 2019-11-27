@@ -14,7 +14,7 @@ class TestPub < Minitest::Test
     @drink2 = Drink.new("Tennants", 6, 10)
     @drink4 = Drink.new("The Satan Circus", 10, 90)
     @food1 = Food.new("pizza", 5, 20)
-    @pub = Pub.new("CodePub", 0, @food1, {@drink1 => 3, @drink2 => 0, @drink4 => 1})
+    @pub = Pub.new("CodePub", 0, {@food1 => 10}, {@drink1 => 3, @drink2 => 0, @drink4 => 1})
     @customer1 = Customer.new("SiggyDaMan", 100, 100)
     @customer2 = Customer.new("Silvia", 1, 18)
     @customer3 = Customer.new("LittleJimmy", 50, 10)
@@ -28,8 +28,12 @@ class TestPub < Minitest::Test
     assert_equal(0, @pub.till)
   end
 
-  def test_pub_drink_counter_starts_with_three_drinks
+  def test_pub_drink_counter_starts_with_four_stocks
     assert_equal(4, @pub.total_drinks_stock)
+  end
+
+  def test_pub_starts_with_stock_ten
+    assert_equal(10, @pub.total_foods_stock)
   end
 
   def test_check_pub_has_a_drink

@@ -6,17 +6,21 @@ class Pub
 attr_reader :name, :till
 
 
-  def initialize(name, till, food, drinks_hash = {} )
+  def initialize(name, till, food_hash, drinks_hash = {} )
     @name = name
     @till = till
     @drinks_stock = drinks_hash
     @minimum_age = 18
     @drunkeness_limit = 100
-    @food = food
+    @foods_stock = food_hash
   end
 
   def total_drinks_stock()
     return @drinks_stock.values.inject(0){|sum,x| sum + x}
+  end
+
+  def total_foods_stock()
+    return @foods_stock.values.inject(0){|sum,x| sum + x}
   end
 
   def drink_stock(drink)
@@ -67,6 +71,18 @@ attr_reader :name, :till
   def check_customer_drunkennes(customer)
     return customer.drunkenness
   end
+
+  # def sell_food(customer, food)
+  #   if has_food(food)
+  #     if ask_customer_to_check_money(customer, food)
+  #       reduce_food_stock(food)
+  #       increase_till_by_price_of_drink(food)
+  #       customer.increase_drink(food)
+  #       customer.decrease_wallet(food)
+  #       customer.decrease_drunkenness(food)
+  #     end
+  #   end
+  # end
 
 
 end
