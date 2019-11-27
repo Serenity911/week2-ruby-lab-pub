@@ -32,4 +32,9 @@ attr_reader :name, :wallet, :age, :drunkenness
   def increase_drunkenness(drink)
     return @drunkenness += drink.alcohol_level
   end
+
+  def decrease_drunkenness(food)
+    return @drunkenness -= food.rejuvenation_level
+  end
+
 end
