@@ -8,6 +8,7 @@ attr_reader :name, :till
     @till = till
     @drinks = drinks_array
     @minimum_age = 18
+    @drunkeness_limit = 100
   end
 
   def drink_stock()
@@ -36,11 +37,14 @@ attr_reader :name, :till
   def sell_a_drink(customer, drink)
     if @drinks.include?(drink)
       if check_minimum_age(customer)
-        if ask_customer_to_check_money(customer, drink)
-          reduce_drink_stock(drink)
-          increase_till_by_price_of_drink(drink)
-          customer.increase_drink(drink)
-          customer.decrease_wallet(drink)
+        if check_customer_drunkennes(customer) <= @drunkeness_limit
+          if ask_customer_to_check_money(customer, drink)
+            reduce_drink_stock(drink)
+            increase_till_by_price_of_drink(drink)
+            customer.increase_drink(drink)
+            customer.decrease_wallet(drink)
+            customer.increase_drunkenness(drink)
+          end
         end
       end
     end
@@ -50,5 +54,8 @@ attr_reader :name, :till
     return customer.age >= @minimum_age
   end
 
+  def check_customer_drunkennes(customer)
+    return customer.drunkenness
+  end
 
 end

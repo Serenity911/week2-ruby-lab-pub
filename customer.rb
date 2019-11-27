@@ -1,12 +1,16 @@
 class Customer
 
-attr_reader :name, :wallet, :age
+attr_reader :name, :wallet, :age, :drunkenness
 
   def initialize(name, wallet, age)
     @name = name
     @wallet = wallet
-    @drinks = []
     @age = age
+    @drinks = []
+    @drunkenness = 0
+    # TODO: USE DRUNK TRUE OR FALSE
+    # @alcohol_consumed = 0
+    # @drunk = false
   end
 
   def check_money_for_drink(drink)
@@ -25,4 +29,7 @@ attr_reader :name, :wallet, :age
     return @wallet -= drink.price
   end
 
+  def increase_drunkenness(drink)
+    return @drunkenness += drink.alcohol_level
+  end
 end

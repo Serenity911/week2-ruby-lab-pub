@@ -9,7 +9,7 @@ class TestCustomer < Minitest::Test
 
   def setup
     @customer = Customer.new("Lauren", 1000, 18)
-    @drink = Drink.new("Long Island Tea", 20)
+    @drink = Drink.new("Long Island Tea", 20, 18)
   end
 
 
@@ -43,5 +43,13 @@ class TestCustomer < Minitest::Test
     assert_equal(18, @customer.age)
   end
 
+  def test_customer_drunkenness
+    assert_equal(0, @customer.drunkenness)
+  end
+
+  def test_customer_drunkenness_increases_with_a_drink
+    @customer.increase_drunkenness(@drink)
+    assert_equal(18, @customer.drunkenness)
+  end
 
 end
