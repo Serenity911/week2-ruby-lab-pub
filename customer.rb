@@ -1,11 +1,12 @@
 class Customer
 
-attr_reader :name, :wallet
+attr_reader :name, :wallet, :age
 
-  def initialize(name, wallet)
+  def initialize(name, wallet, age)
     @name = name
     @wallet = wallet
     @drinks = []
+    @age = age
   end
 
   def check_money_for_drink(drink)

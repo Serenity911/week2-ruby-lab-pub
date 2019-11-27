@@ -12,8 +12,9 @@ class TestPub < Minitest::Test
     @drink1 = Drink.new("Cosmopolitan", 10)
     @drink2 = Drink.new("Tennants", 6)
     @pub = Pub.new("CodePub", 0, [@drink1, @drink2])
-    @customer1 = Customer.new("SiggyDaMan", 100)
-    @customer2 = Customer.new("Silvia", 1)
+    @customer1 = Customer.new("SiggyDaMan", 100, 100)
+    @customer2 = Customer.new("Silvia", 1, 18)
+    @customer3 = Customer.new("LittleJimmy", 50, 10)
   end
 
   def test_pub_has_a_name
@@ -77,5 +78,30 @@ class TestPub < Minitest::Test
     assert_equal(1, @customer2.wallet)
   end
 
+  def test_do_not_sell_drink_if_customer_is_not_old_enough
+    @pub.sell_a_drink(@customer3, @drink1)
+    assert_equal(2, @pub.drink_stock)
+    assert_equal(0, @pub.till)
+    assert_equal(0, @customer3.drink_counter)
+    assert_equal(50, @customer3.wallet)
+  end
+
+  def test_sell_drink_if_customer_is_old_enough
+    @pub.sell_a_drink(@customer1, @drink1)
+    assert_equal(1, @pub.drink_stock)
+    assert_equal(10, @pub.till)
+    assert_equal(1, @customer1.drink_counter)
+    assert_equal(90, @customer1.wallet)
+  end
+
+  def test_customer_is_old_enough_to_drink
+    customer_old_enough = @pub.check_minimum_age(@customer1)
+    assert_equal(true, customer_old_enough)
+  end
+
+  def test_customer_is_old_enough_to_drink
+    customer_not_old_enough = @pub.check_minimum_age(@customer3)
+    assert_equal(false, customer_not_old_enough)
+  end
 
 end
